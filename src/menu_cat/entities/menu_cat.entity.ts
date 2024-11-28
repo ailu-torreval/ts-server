@@ -1,8 +1,9 @@
 import { Merchant } from "src/merchant/entities/merchant.entity";
 import { Product } from "src/product/entities/product.entity";
-import { Column, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
-export class Menu_cat {
+@Entity()
+export class MenuCat {
     @PrimaryGeneratedColumn()
     id: number;
   

@@ -1,8 +1,8 @@
-import { Menu_cat } from "src/menu_cat/entities/menu_cat.entity";
 import { Column, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ProductExtra } from "src/product_extra/entities/product_extra.entity";
 import { ProductOption } from "src/product_option/entities/product_option.entity";
 import { Merchant } from "src/merchant/entities/merchant.entity";
+import { MenuCat } from "src/menu_cat/entities/menu_cat.entity";
 
 export class Product {
     @PrimaryGeneratedColumn()
@@ -38,8 +38,8 @@ export class Product {
     @ManyToOne(() => Merchant, (merchant) => merchant.products)
     merchant: Merchant;
 
-    @ManyToOne(() => Menu_cat, (menu_cat) => menu_cat.products)
-    menu_cat: Menu_cat;
+    @ManyToOne(() => MenuCat, (menu_cat) => menu_cat.products)
+    menu_cat: MenuCat;
 
     @OneToMany(() => ProductOption, (product_option) => product_option.product)
     options: ProductOption[]
@@ -56,7 +56,7 @@ export class Product {
         has_options: boolean,
         highlight_txt: string,
         is_suggestion: boolean,
-        menu_cat: Menu_cat,
+        menu_cat: MenuCat,
         merchant: Merchant,
         options: ProductOption[],
         extras: ProductExtra[],

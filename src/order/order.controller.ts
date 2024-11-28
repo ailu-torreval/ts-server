@@ -6,15 +6,17 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
+import { OrderDto } from './dto/order.dto';
 
 @Controller('order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Post()
-  create(@Body() createOrderDto: CreateOrderDto) {
+  create(@Body() createOrderDto: OrderDto) {
     return this.orderService.create(createOrderDto);
   }
 
@@ -28,8 +30,8 @@ export class OrderController {
     return this.orderService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateOrderDto: OrderDto) {
     return this.orderService.update(+id, updateOrderDto);
   }
 

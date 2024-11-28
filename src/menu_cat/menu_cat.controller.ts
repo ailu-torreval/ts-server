@@ -30,6 +30,11 @@ export class MenuCatController {
     return this.menuCatService.findOne(+id);
   }
 
+  @Get('merchant/:id')
+  findByMerchant(@Param('id') id: string) {
+    return this.menuCatService.findByMerchant(+id);
+  }
+
   @Put(':id')
   update(@Param('id') id: string, @Body() updateMenuCatDto: MenuCatDto) {
     return this.menuCatService.update(+id, updateMenuCatDto);

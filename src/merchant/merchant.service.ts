@@ -1,26 +1,75 @@
-import { Injectable } from '@nestjs/common';
-import { CreateMerchantDto } from './dto/merchant.dto';
-import { UpdateMerchantDto } from './dto/update-merchant.dto';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { MerchantDto } from './dto/merchant.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Merchant } from './entities/merchant.entity';
+import { Repository } from 'typeorm';
+
 
 @Injectable()
 export class MerchantService {
-  create(createMerchantDto: CreateMerchantDto) {
-    return 'This action adds a new merchant';
+
+  constructor(
+    @InjectRepository(Merchant)
+    private merchantRepository: Repository<Merchant>
+  ) {}
+
+  
+  async create(createMerchantDto: MerchantDto): Promise<Merchant> {
+    try {
+      const merchant = this.merchantRepository.create(createMerchantDto);
+      await this.merchantRepository.save(merchant);
+      return merchant;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Error creating merchant, ${error}`,
+      );
+    }
   }
 
-  findAll() {
-    return `This action returns all merchant`;
+  async findAll(): Promise<Merchant[]> {
+    try {
+      return await this.merchantRepository.find({relations: ['menu_cats', 'products', 'tables']});
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Error fetching merchants, ${error}`,
+      );  
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} merchant`;
+  async findOne(id: number): Promise<Merchant> {
+    try {
+      return await this.merchantRepository.findOne({where: {id}, relations: ['menu_cats', 'menu_cats.products','tables']});
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Error fetching merchant, ${error}`,
+      );
+    }
   }
 
-  update(id: number, updateMerchantDto: UpdateMerchantDto) {
-    return `This action updates a #${id} merchant`;
-  }
+  async update(id: number, updateMerchantDto: MerchantDto): Promise<Merchant> {
+    try {
+      const updatedMerchant = await this.merchantRepository.update(id, updateMerchantDto);
+      if (updatedMerchant.affected === 1) {
+        return this.merchantRepository.findOne({
+          where: { id },
+          relations: ['menu_cats', 'products', 'tables'],
+        });
+      }
+    } catch (error) {
+      throw new NotFoundException(`Merchant with id ${id} not found`);
+    } 
+   }
 
-  remove(id: number) {
-    return `This action removes a #${id} merchant`;
+  async remove(id: number) {
+    try {
+      const deletedMerchant = await this.merchantRepository.delete(id);
+      if (deletedMerchant.affected === 1) {
+        return { id: id, status: 'deleted' };
+      } else {
+        throw new NotFoundException(`Merchant with id ${id} not found`);
+      }
+    } catch(error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 }

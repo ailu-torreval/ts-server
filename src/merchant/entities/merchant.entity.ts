@@ -1,4 +1,4 @@
-import { Menu_cat } from 'src/menu_cat/entities/menu_cat.entity';
+import { MenuCat } from 'src/menu_cat/entities/menu_cat.entity';
 import { Product } from 'src/product/entities/product.entity';
 import { Table } from 'src/table/entities/table.entity';
 import { Column, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
@@ -19,8 +19,8 @@ export class Merchant {
   @Column()
   is_table_service: boolean;
 
-  @OneToMany(() => Menu_cat, (menu_cat) => menu_cat.merchant)
-  menu_cats: Menu_cat[];
+  @OneToMany(() => MenuCat, (menu_cat) => menu_cat.merchant)
+  menu_cats: MenuCat[];
 
   @OneToMany(() => Product, (product) => product.merchant)
   products: Product[];
@@ -34,7 +34,7 @@ export class Merchant {
     desc: string,
     is_table_service: boolean,
     tables: Table[],
-    menu_cats: Menu_cat[],
+    menu_cats: MenuCat[],
     products: Product[]
   ) {
     this.admin_id = admin_id;
