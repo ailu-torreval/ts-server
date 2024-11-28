@@ -6,17 +6,17 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { MenuCatService } from './menu_cat.service';
-import { CreateMenuCatDto } from './dto/create-menu_cat.dto';
-import { UpdateMenuCatDto } from './dto/menu_cat.dto';
+import { MenuCatDto } from './dto/menu_cat.dto';
 
 @Controller('menu-cat')
 export class MenuCatController {
   constructor(private readonly menuCatService: MenuCatService) {}
 
   @Post()
-  create(@Body() createMenuCatDto: CreateMenuCatDto) {
+  create(@Body() createMenuCatDto: MenuCatDto) {
     return this.menuCatService.create(createMenuCatDto);
   }
 
@@ -30,8 +30,8 @@ export class MenuCatController {
     return this.menuCatService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMenuCatDto: UpdateMenuCatDto) {
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateMenuCatDto: MenuCatDto) {
     return this.menuCatService.update(+id, updateMenuCatDto);
   }
 

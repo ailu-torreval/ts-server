@@ -15,6 +15,10 @@ export class UserDto {
 
     @IsNotEmpty()
     @IsString()
+    notification_token: string;
+    
+    @IsNotEmpty()
+    @IsString()
     email: string;
 
     @IsNotEmpty()

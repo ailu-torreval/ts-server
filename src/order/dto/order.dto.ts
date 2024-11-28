@@ -17,9 +17,8 @@ export class OrderDto {
     @IsNumber()
     contact_method: number;
 
-    @IsNotEmpty()
     @IsNumber()
-    ref_nr: number;
+    table_id: number;
 
     @IsNotEmpty()
     @IsNumber()

@@ -10,10 +10,10 @@ export class Order {
   merchant_id: number;
 
   @Column()
-  contact_method: number; // 0 = bar pick up, 1 = table service
+  contact_method: number; // 0 = table service, 1 = bar pickup with push notification, 2 = bar pickup without app notification
 
   @Column()
-  ref_nr: number;
+  table_id: number;
 
   @Column()
   payment_method: number; // 0 = card, 1 = Mobilepay
@@ -36,7 +36,7 @@ export class Order {
   constructor(
     merchant_id: number,
     contact_method: number,
-    ref_nr: number,
+    table_id: number,
     payment_method: number,
     payment_ref: number,
     date: Date,
@@ -46,7 +46,7 @@ export class Order {
   ) {
     this.merchant_id = merchant_id;
     this.contact_method = contact_method;
-    this.ref_nr = ref_nr;
+    this.table_id = table_id;
     this.payment_method = payment_method;
     this.payment_ref = payment_ref;
     this.date = date;

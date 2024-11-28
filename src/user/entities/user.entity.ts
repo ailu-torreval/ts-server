@@ -19,6 +19,9 @@ export class User {
   @Column()
   password: string;
 
+  @Column()
+  notification_token: string;
+
   @Column({
     type: 'enum',
     enum: Role,
@@ -38,6 +41,7 @@ export class User {
   constructor(
     firstname: string,
     lastname: string,
+    notification_token: string,
     password: string,
     email: string,
     dob: Date,
@@ -47,6 +51,7 @@ export class User {
   ) {
     this.firstname = firstname;
     this.lastname = lastname;
+    this.notification_token = notification_token;
     this.password = password;
     this.email = email;
     this.dob = dob;
