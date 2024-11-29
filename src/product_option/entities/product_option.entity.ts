@@ -14,7 +14,7 @@ export class ProductOption {
     @Column()
     price: number;
 
-    @ManyToOne(() => Product, (product) => product.options)
+    @ManyToOne(() => Product, (product) => product.option)
     product: Product
 
     constructor(
