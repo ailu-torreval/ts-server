@@ -11,4 +11,8 @@ export class TableDto {
     @IsNotEmpty()
     @IsString()
     table_code: string;
+
+    @IsNotEmpty()
+    @IsNumber()
+    capacity: number;
 }

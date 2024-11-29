@@ -5,10 +5,6 @@ export class ProductOptionDto {
     id:number;
 
     @IsNotEmpty()
-    @IsNumber()
-    product_id: number;
-
-    @IsNotEmpty()
     @IsString()
     name: string;
 

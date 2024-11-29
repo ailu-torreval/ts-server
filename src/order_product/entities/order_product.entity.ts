@@ -24,11 +24,11 @@ export class OrderProduct {
 
     @ManyToMany(() => ProductExtra)
     @JoinTable()
-    product_extras: ProductExtra[]
+    extras: ProductExtra[]
 
     @ManyToMany(() => ProductOption)
     @JoinTable()
-    product_options: ProductOption[]
+    option: ProductOption
 
     @ManyToOne(() => Order, (order) => order.products)
     order: Order
@@ -38,16 +38,16 @@ export class OrderProduct {
         price: number,
         name:string,
         note: string,
-        product_extras: ProductExtra[],
-        product_options: ProductOption[],
+        extras: ProductExtra[],
+        option: ProductOption,
         order: Order
     ) {
         this.product_id = product_id;
         this.name = name;
         this.price = price;
         this.note = note;
-        this.product_extras = product_extras;
-        this.product_options = product_options;
+        this.extras = extras;
+        this.option = option;
         this.order = order;
     }
 }

@@ -1,26 +1,124 @@
-import { Injectable } from '@nestjs/common';
-import { CreateOrderDto } from './dto/order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { OrderDto } from './dto/order.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Order } from './entities/order.entity';
+import { Repository } from 'typeorm';
+import { UserService } from 'src/user/user.service';
+import { OrderProductService } from 'src/order_product/order_product.service';
 
 @Injectable()
 export class OrderService {
-  create(createOrderDto: CreateOrderDto) {
-    return 'This action adds a new order';
+  constructor(
+    @InjectRepository(Order)
+    private orderRepository: Repository<Order>,
+    private userService: UserService,
+    private orderProductService: OrderProductService,
+  ) {}
+
+  async create(createOrderDto: OrderDto): Promise<Order> {
+    try {
+      const { user_id, order_products, ...rest } = createOrderDto;
+      const user = await this.userService.findOne(createOrderDto.user_id);
+      const order = this.orderRepository.create(rest);
+      const createdOrder = await this.orderRepository.save(order);
+      const orderProducts = await this.orderProductService.createMany(
+        order_products,
+        createdOrder.id,
+      );
+      return await this.orderRepository.findOne({
+        where: { id: createdOrder.id },
+        relations: ['user'],
+        join: {
+          alias: 'order',
+          leftJoinAndSelect: {
+            products: 'order.products',
+            product_extras: 'product.extras',
+            product_options: 'products.options',
+          }}
+      })
+    } catch (error) {
+      throw new InternalServerErrorException(`Error creating order, ${error}`);
+    }
   }
 
-  findAll() {
-    return `This action returns all order`;
+  async findAll(): Promise<Order[]> {
+    try {
+      const orders = await this.orderRepository.find({
+        relations: ['user'],
+        join: {
+          alias: 'order',
+          leftJoinAndSelect: {
+            products: 'order.products',
+            product_extras: 'product.extras',
+            product_options: 'products.options',
+          }}
+      });
+      return orders;
+    } catch (error) {
+      throw new InternalServerErrorException('Error fetching orders' + error);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} order`;
+  async findOne(id: number): Promise<Order> {
+    try {
+      const selectedOrder = await this.orderRepository.findOne({
+        where: { id },
+        relations: ['user'],
+        join: {
+          alias: 'order',
+          leftJoinAndSelect: {
+            products: 'order.products',
+            product_extras: 'product.extras',
+            product_options: 'products.options',
+          }}
+      });
+      if (selectedOrder) {
+        return selectedOrder;
+      } else {
+        throw new NotFoundException(`Order with id ${id} not found`);
+      }
+    } catch (error) {
+      throw new InternalServerErrorException('Error fetching orders' + error);
+    }
   }
 
-  update(id: number, updateOrderDto: UpdateOrderDto) {
-    return `This action updates a #${id} order`;
+  async update(id: number, updateOrderDto: Partial<OrderDto>): Promise<Order> {
+    try {
+      const updatedOrder = await this.orderRepository.update(id, updateOrderDto);
+      if (updatedOrder.affected === 1) {
+        return this.orderRepository.findOne({
+          where: { id },
+          relations: ['user'],
+          join: {
+            alias: 'order',
+            leftJoinAndSelect: {
+              products: 'order.products',
+              product_extras: 'product.extras',
+              product_options: 'products.options',
+            }}
+        });
+      } else {
+        throw new NotFoundException(`Order with id ${id} not found`);
+      }
+    } catch (error) {
+      throw new InternalServerErrorException('Error updating order  ' + error);
+    }
   }
 
-  remove(id: number) {
+  async changeStatus(id: number, status: string): Promise<any> {
+    try {
+      const updatedOrder = await this.orderRepository.update(id, { order_status: status });
+      if (updatedOrder.affected === 1) {
+        return {'success': true}; 
+     } else {
+        throw new NotFoundException(`Order with id ${id} not found`);
+      }
+    } catch (error) {
+      throw new InternalServerErrorException('Error updating order  ' + error);
+    }
+  }
+
+  async remove(id: number): Promise<any> {
     return `This action removes a #${id} order`;
   }
 }

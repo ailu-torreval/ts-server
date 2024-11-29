@@ -23,7 +23,10 @@ export class OrderProductDto {
     @IsNumber()
     total_amount: number;
 
-    order_product_extras: ProductExtra[];
+    @IsNumber()
+    extras_ids: number[];
 
-    order_product_options: ProductOption[];
+    @IsNotEmpty()
+    @IsNumber()
+    option_id: number;
 }

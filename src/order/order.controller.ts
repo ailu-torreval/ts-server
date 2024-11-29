@@ -35,6 +35,11 @@ export class OrderController {
     return this.orderService.update(+id, updateOrderDto);
   }
 
+  @Put('status/:id')
+  updateStatus(@Param('id') id: string, @Body() status: any) {
+    return this.orderService.changeStatus(+id, status);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.orderService.remove(+id);

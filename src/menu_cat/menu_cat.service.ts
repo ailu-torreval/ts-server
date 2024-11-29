@@ -106,5 +106,6 @@ export class MenuCatService {
       return { id: id, status: 'deleted' };
     } else {
       throw new NotFoundException(`Invoice with id ${id} not found`);
-    }  }
+    }  
+  }
 }

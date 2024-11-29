@@ -1,4 +1,4 @@
-import { Column, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ProductExtra } from "src/product_extra/entities/product_extra.entity";
 import { ProductOption } from "src/product_option/entities/product_option.entity";
 import { Merchant } from "src/merchant/entities/merchant.entity";
@@ -42,9 +42,11 @@ export class Product {
     menu_cat: MenuCat;
 
     @OneToMany(() => ProductOption, (product_option) => product_option.product)
-    options: ProductOption[]
-
+    @JoinColumn()
+    option: ProductOption;
+    
     @OneToMany(() => ProductExtra, (product_extra) => product_extra.product)
+    @JoinColumn()
     extras: ProductExtra[]
 
     constructor(
@@ -58,7 +60,7 @@ export class Product {
         is_suggestion: boolean,
         menu_cat: MenuCat,
         merchant: Merchant,
-        options: ProductOption[],
+        option: ProductOption,
         extras: ProductExtra[],
         option_title?: string
         ) {
@@ -73,7 +75,7 @@ export class Product {
             this.option_title = option_title;
             this.menu_cat = menu_cat;
             this.merchant = merchant;
-            this.options = options;
+            this.option = option;
             this.extras = extras;
         }
     

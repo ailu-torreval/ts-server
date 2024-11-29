@@ -7,15 +7,20 @@ export class Table {
   
     @Column()
     table_code: string;
+  
+    @Column()
+    capacity: number;
 
     @ManyToOne(() => Merchant, (merchant) => merchant.tables)
     merchant: Merchant;
 
     constructor(
         table_code: string,
+        capacity: number,
         merchant: Merchant
     ) {
         this.table_code = table_code;
+        this.capacity = capacity;
         this.merchant = merchant;
     }
 }

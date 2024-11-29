@@ -6,17 +6,17 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { TableService } from './table.service';
-import { CreateTableDto } from './dto/table.dto';
-import { UpdateTableDto } from './dto/update-table.dto';
+import { TableDto } from './dto/table.dto';
 
 @Controller('table')
 export class TableController {
   constructor(private readonly tableService: TableService) {}
 
   @Post()
-  create(@Body() createTableDto: CreateTableDto) {
+  create(@Body() createTableDto: TableDto) {
     return this.tableService.create(createTableDto);
   }
 
@@ -30,8 +30,8 @@ export class TableController {
     return this.tableService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTableDto: UpdateTableDto) {
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateTableDto: TableDto) {
     return this.tableService.update(+id, updateTableDto);
   }
 

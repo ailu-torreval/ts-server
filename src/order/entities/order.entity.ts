@@ -27,8 +27,11 @@ export class Order {
   @Column()
   total_amount: number;
 
+  @Column()
+  order_status: string; // 'pending', 'completed', 'cancelled' etc.
+
   @ManyToOne(() => User, (user) => user.orders)
-  user: User
+  user: Partial<User>;
 
   @OneToMany(() => OrderProduct, (order_product) => order_product.order)
   products: OrderProduct[];
@@ -41,6 +44,7 @@ export class Order {
     payment_ref: number,
     date: Date,
     total_amount: number,
+    order_status: string,
     user: User,
     products: OrderProduct[],
   ) {
@@ -51,6 +55,7 @@ export class Order {
     this.payment_ref = payment_ref;
     this.date = date;
     this.total_amount = total_amount;
+    this.order_status = order_status;
     this.user = user;
     this.products = products;
   }

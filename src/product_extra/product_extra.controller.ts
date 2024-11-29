@@ -3,20 +3,19 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { ProductExtraService } from './product_extra.service';
-import { CreateProductExtraDto } from './dto/product_extra.dto';
-import { UpdateProductExtraDto } from './dto/update-product_extra.dto';
+import { ProductExtraDto } from './dto/product_extra.dto';
 
 @Controller('product-extra')
 export class ProductExtraController {
   constructor(private readonly productExtraService: ProductExtraService) {}
 
   @Post()
-  create(@Body() createProductExtraDto: CreateProductExtraDto) {
+  create(@Body() createProductExtraDto: ProductExtraDto) {
     return this.productExtraService.create(createProductExtraDto);
   }
 
@@ -30,10 +29,10 @@ export class ProductExtraController {
     return this.productExtraService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id') id: string,
-    @Body() updateProductExtraDto: UpdateProductExtraDto,
+    @Body() updateProductExtraDto: ProductExtraDto,
   ) {
     return this.productExtraService.update(+id, updateProductExtraDto);
   }

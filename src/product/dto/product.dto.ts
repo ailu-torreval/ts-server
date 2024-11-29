@@ -1,4 +1,8 @@
 import { IsBoolean, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { ProductOption } from "src/product_option/entities/product_option.entity";
+import { ProductExtra } from "src/product_extra/entities/product_extra.entity";
+import { ProductOptionDto } from "src/product_option/dto/product_option.dto";
+import { ProductExtraDto } from "src/product_extra/dto/product_extra.dto";
 
 export class ProductDto {
     @IsNumber()
@@ -41,10 +45,7 @@ export class ProductDto {
     @IsString()
     option_title: string;
 
-    @IsNumber()
-    product_options_ids: number[];
+    option: ProductOptionDto;
 
-    @IsNumber()
-    product_extras_ids: number[];
-
+    extras: ProductExtraDto[];
 }
