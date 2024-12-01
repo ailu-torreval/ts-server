@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { ProductExtra } from 'src/product_extra/entities/product_extra.entity';
 import { ProductOption } from 'src/product_option/entities/product_option.entity';
+import { Order } from 'src/order/entities/order.entity';
 
 @Injectable()
 export class OrderProductService {
@@ -18,7 +19,7 @@ export class OrderProductService {
     private productOptionRepository: Repository<ProductOption>,
   ) {}
 
-  async create(createOrderProdDto: OrderProductDto): Promise<OrderProduct> {
+  async create(createOrderProdDto: OrderProductDto, order?:Order): Promise<OrderProduct> {
     try {
       const { extras_ids, option_id, ...rest } = createOrderProdDto;
       let orderProd: Partial<OrderProduct> = rest;
@@ -28,9 +29,16 @@ export class OrderProductService {
         });
       }
       if(createOrderProdDto.option_id) {
+        console.log('option_id', createOrderProdDto.option_id);
         orderProd.option = await this.productOptionRepository.findOne({where: { id:createOrderProdDto.option_id}});
+        console.log('option', orderProd.option);
+      }
+      if(order){
+        orderProd.order = order;
       }
       const createdOrderProd = await this.orderProdRepository.create(orderProd);
+      console.log('createdOrderProd', createdOrderProd);
+
       return await this.orderProdRepository.save(createdOrderProd);
 
     } catch (error) {
@@ -38,10 +46,9 @@ export class OrderProductService {
     }
   }
 
-  async createMany(createOrderProductDto: OrderProductDto[], orderId: number): Promise<OrderProduct[]> {
+  async createMany(createOrderProductDto: OrderProductDto[], order: Order): Promise<OrderProduct[]> {
     return await Promise.all(createOrderProductDto.map(async (orderProduct) => {
-      orderProduct.order_id = orderId;
-      return await this.create(orderProduct);
+      return await this.create(orderProduct, order);
     }));
   }
 

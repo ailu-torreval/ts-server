@@ -8,16 +8,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MenuCat } from './entities/menu_cat.entity';
 import { Repository } from 'typeorm';
 import { MerchantService } from 'src/merchant/merchant.service';
-import { ProductService } from 'src/product/product.service';
-import { Product } from 'src/product/entities/product.entity';
 
 @Injectable()
 export class MenuCatService {
   constructor(
     @InjectRepository(MenuCat)
     private menuCatRepository: Repository<MenuCat>,
-    @InjectRepository(Product)
-    private productRepository: Repository<Product>,
     private merchantService: MerchantService,
   ) {}
 

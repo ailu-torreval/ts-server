@@ -19,22 +19,16 @@ export class OrderService {
     try {
       const { user_id, order_products, ...rest } = createOrderDto;
       const user = await this.userService.findOne(createOrderDto.user_id);
-      const order = this.orderRepository.create(rest);
+      const order = this.orderRepository.create({...rest, date: new Date(rest.date), user});
       const createdOrder = await this.orderRepository.save(order);
+      console.log(createdOrder)
       const orderProducts = await this.orderProductService.createMany(
         order_products,
-        createdOrder.id,
+        createdOrder,
       );
       return await this.orderRepository.findOne({
         where: { id: createdOrder.id },
-        relations: ['user'],
-        join: {
-          alias: 'order',
-          leftJoinAndSelect: {
-            products: 'order.products',
-            product_extras: 'product.extras',
-            product_options: 'products.options',
-          }}
+        relations: ['products', 'products.extras', 'products.option'],
       })
     } catch (error) {
       throw new InternalServerErrorException(`Error creating order, ${error}`);
@@ -44,14 +38,7 @@ export class OrderService {
   async findAll(): Promise<Order[]> {
     try {
       const orders = await this.orderRepository.find({
-        relations: ['user'],
-        join: {
-          alias: 'order',
-          leftJoinAndSelect: {
-            products: 'order.products',
-            product_extras: 'product.extras',
-            product_options: 'products.options',
-          }}
+        relations: ['user', 'products', 'products.extras', 'products.option'],
       });
       return orders;
     } catch (error) {

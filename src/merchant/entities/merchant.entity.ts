@@ -1,8 +1,9 @@
 import { MenuCat } from 'src/menu_cat/entities/menu_cat.entity';
+import { MerchantTable } from 'src/merchant-table/entities/merchant-table.entity';
 import { Product } from 'src/product/entities/product.entity';
-import { Table } from 'src/table/entities/table.entity';
-import { Column, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity()
 export class Merchant {
   @PrimaryGeneratedColumn()
   id: number;
@@ -19,21 +20,20 @@ export class Merchant {
   @Column()
   is_table_service: boolean;
 
-  @OneToMany(() => MenuCat, (menu_cat) => menu_cat.merchant)
+  @OneToMany(() => MenuCat, (menuCat) => menuCat.merchant)
   menu_cats: MenuCat[];
 
   @OneToMany(() => Product, (product) => product.merchant)
   products: Product[];
 
-  @OneToMany(() => Table, (table) => table.merchant)
-  tables: Table[];
+  @OneToMany(() => MerchantTable, (table) => table.merchant)
+  merchant_tables: MerchantTable[];
 
   constructor(
     admin_id: number,
     name: string,
     desc: string,
     is_table_service: boolean,
-    tables: Table[],
     menu_cats: MenuCat[],
     products: Product[]
   ) {
@@ -41,7 +41,6 @@ export class Merchant {
     this.name = name;
     this.desc = desc;
     this.is_table_service = is_table_service;
-    this.tables = tables;
     this.menu_cats = menu_cats;
     this.products = products;
   }

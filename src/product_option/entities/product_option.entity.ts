@@ -1,6 +1,7 @@
 import { Product } from "src/product/entities/product.entity";
-import { Column, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity()
 export class ProductOption {
     @PrimaryGeneratedColumn()
     id: number;
@@ -14,7 +15,7 @@ export class ProductOption {
     @Column()
     price: number;
 
-    @ManyToOne(() => Product, (product) => product.option)
+    @ManyToOne(() => Product, (product) => product.options)
     product: Product
 
     constructor(

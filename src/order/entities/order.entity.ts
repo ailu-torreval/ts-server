@@ -1,7 +1,8 @@
 import { OrderProduct } from 'src/order_product/entities/order_product.entity';
 import { User } from 'src/user/entities/user.entity';
-import { Column, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity()
 export class Order {
   @PrimaryGeneratedColumn()
   id: number;
@@ -13,7 +14,7 @@ export class Order {
   contact_method: number; // 0 = table service, 1 = bar pickup with push notification, 2 = bar pickup without app notification
 
   @Column()
-  table_id: number;
+  table_code: number;
 
   @Column()
   payment_method: number; // 0 = card, 1 = Mobilepay
@@ -39,7 +40,7 @@ export class Order {
   constructor(
     merchant_id: number,
     contact_method: number,
-    table_id: number,
+    table_code: number,
     payment_method: number,
     payment_ref: number,
     date: Date,
@@ -50,7 +51,7 @@ export class Order {
   ) {
     this.merchant_id = merchant_id;
     this.contact_method = contact_method;
-    this.table_id = table_id;
+    this.table_code = table_code;
     this.payment_method = payment_method;
     this.payment_ref = payment_ref;
     this.date = date;

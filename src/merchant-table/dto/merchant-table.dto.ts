@@ -1,18 +1,19 @@
 import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
-export class TableDto {
+export class MerchantTableDto {
+
     @IsNumber()
-    id:number;
+    id: number;
 
     @IsNotEmpty()
     @IsNumber()
     merchant_id: number;
 
     @IsNotEmpty()
-    @IsString()
-    table_code: string;
-
-    @IsNotEmpty()
     @IsNumber()
     capacity: number;
+
+    @IsNotEmpty()
+    @IsString()
+    table_code: string;
 }

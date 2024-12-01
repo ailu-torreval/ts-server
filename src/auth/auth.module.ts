@@ -4,9 +4,10 @@ import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
-  imports: [ PassportModule, JwtModule.register({
+  imports: [ UserModule, PassportModule, JwtModule.register({
     global: true,
     secret: jwtConstants.secret,
     // signOptions: { expiresIn: '60s' },

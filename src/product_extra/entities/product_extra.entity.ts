@@ -1,6 +1,7 @@
 import { Product } from "src/product/entities/product.entity";
-import { Column, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity()
 export class ProductExtra {
     @PrimaryGeneratedColumn()
     id: number;

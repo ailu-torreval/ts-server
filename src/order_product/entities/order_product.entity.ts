@@ -1,8 +1,9 @@
 import { Order } from "src/order/entities/order.entity";
 import { ProductExtra } from "src/product_extra/entities/product_extra.entity";
 import { ProductOption } from "src/product_option/entities/product_option.entity";
-import { Column, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity()
 export class OrderProduct {
     @PrimaryGeneratedColumn()
     id: number;
@@ -26,11 +27,12 @@ export class OrderProduct {
     @JoinTable()
     extras: ProductExtra[]
 
-    @ManyToMany(() => ProductOption)
+    @ManyToOne(() => ProductOption)
     @JoinTable()
-    option: ProductOption
-
+    option: ProductOption; // No plural here
+    
     @ManyToOne(() => Order, (order) => order.products)
+    @JoinTable()
     order: Order
 
     constructor(

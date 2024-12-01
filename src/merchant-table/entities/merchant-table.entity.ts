@@ -1,26 +1,27 @@
 import { Merchant } from "src/merchant/entities/merchant.entity";
-import { Column, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
-export class Table {
+@Entity()
+export class MerchantTable {
     @PrimaryGeneratedColumn()
     id: number;
-  
-    @Column()
-    table_code: string;
-  
+
     @Column()
     capacity: number;
 
-    @ManyToOne(() => Merchant, (merchant) => merchant.tables)
+    @Column()
+    table_code: string;
+
+    @ManyToOne(() => Merchant, (merchant) => merchant.merchant_tables)
     merchant: Merchant;
 
     constructor(
-        table_code: string,
         capacity: number,
+        table_code: string,
         merchant: Merchant
     ) {
-        this.table_code = table_code;
         this.capacity = capacity;
+        this.table_code = table_code;
         this.merchant = merchant;
     }
 }

@@ -30,6 +30,7 @@ export class AuthService {
       const salt = await bcrypt.genSalt(10);
       const hash = await bcrypt.hash(signupDto.password, salt);
   
+  
       signupDto.password = hash;
       if(signupDto.firstname === 'Admin') {
         signupDto.role = Role.Merchant_admin;

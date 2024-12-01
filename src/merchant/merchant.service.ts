@@ -17,8 +17,7 @@ export class MerchantService {
   async create(createMerchantDto: MerchantDto): Promise<Merchant> {
     try {
       const merchant = this.merchantRepository.create(createMerchantDto);
-      await this.merchantRepository.save(merchant);
-      return merchant;
+      return await this.merchantRepository.save(merchant);
     } catch (error) {
       throw new InternalServerErrorException(
         `Error creating merchant, ${error}`,
@@ -28,7 +27,8 @@ export class MerchantService {
 
   async findAll(): Promise<Merchant[]> {
     try {
-      return await this.merchantRepository.find({relations: ['menu_cats', 'products', 'tables']});
+      console.log(new Date().getTime());
+      return await this.merchantRepository.find({relations: ['menu_cats', 'products', 'merchant_tables']});
     } catch (error) {
       throw new InternalServerErrorException(
         `Error fetching merchants, ${error}`,
@@ -38,7 +38,7 @@ export class MerchantService {
 
   async findOne(id: number): Promise<Merchant> {
     try {
-      return await this.merchantRepository.findOne({where: {id}, relations: ['menu_cats', 'menu_cats.products','tables']});
+      return await this.merchantRepository.findOne({where: {id}, relations: ['menu_cats', 'menu_cats.products','merchant_tables']});
     } catch (error) {
       throw new InternalServerErrorException(
         `Error fetching merchant, ${error}`,
@@ -52,7 +52,7 @@ export class MerchantService {
       if (updatedMerchant.affected === 1) {
         return this.merchantRepository.findOne({
           where: { id },
-          relations: ['menu_cats', 'products', 'tables'],
+          relations: ['menu_cats', 'products', 'merchant_tables'],
         });
       }
     } catch (error) {

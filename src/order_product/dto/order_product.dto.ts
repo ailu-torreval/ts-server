@@ -9,6 +9,10 @@ export class OrderProductDto {
   
     @IsNotEmpty()
     @IsNumber()
+    product_id: number;
+  
+    @IsNotEmpty()
+    @IsNumber()
     order_id: number;
   
     @IsNotEmpty()

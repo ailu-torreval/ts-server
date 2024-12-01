@@ -10,10 +10,26 @@ import { ProductExtraModule } from './product_extra/product_extra.module';
 import { MenuCatModule } from './menu_cat/menu_cat.module';
 import { OrderModule } from './order/order.module';
 import { OrderProductModule } from './order_product/order_product.module';
-import { TableModule } from './table/table.module';
+import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { dbConfig } from '../data.source';
+import { MerchantTableModule } from './merchant-table/merchant-table.module';
 
 @Module({
-  imports: [AuthModule, UserModule, MerchantModule, ProductModule, ProductOptionModule, ProductExtraModule, MenuCatModule, OrderModule, OrderProductModule, TableModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    TypeOrmModule.forRoot(dbConfig),
+    AuthModule,
+    UserModule,
+    MerchantModule,
+    ProductModule,
+    ProductOptionModule,
+    ProductExtraModule,
+    MenuCatModule,
+    OrderModule,
+    OrderProductModule,
+    MerchantTableModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

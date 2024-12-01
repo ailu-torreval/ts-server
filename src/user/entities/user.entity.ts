@@ -25,7 +25,7 @@ export class User {
   @Column({
     type: 'enum',
     enum: Role,
-    default: [Role.User],
+    default: Role.User, // Corrected default value
   })
   role: Role;
 
@@ -47,7 +47,6 @@ export class User {
     dob: Date,
     phone_nr: string,
     role?: Role,
-    orders?: Order[],
   ) {
     this.firstname = firstname;
     this.lastname = lastname;
@@ -57,6 +56,5 @@ export class User {
     this.dob = dob;
     this.phone_nr = phone_nr;
     this.role = role || Role.User;
-    this.orders = orders || [];
   }
 }

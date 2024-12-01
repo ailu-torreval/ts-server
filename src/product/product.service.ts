@@ -15,6 +15,7 @@ export class ProductService {
   constructor(
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
+    @InjectRepository(Merchant)
     private merchantRepository: Repository<Merchant>,
     private extraService: ProductExtraService,
     private optionService: ProductOptionService,
@@ -23,23 +24,25 @@ export class ProductService {
 
   async create(createProductDto: ProductDto): Promise<Product> {
     try {
-      const { merchant_id, extras, option, ...rest } = createProductDto;
+      const { merchant_id, extras, options, ...rest } = createProductDto;
       let product: Partial<Product> = rest;
       product.merchant = await this.merchantRepository.findOne({where: {id: merchant_id}});
       const p = await this.productRepository.create(product);
       let prodExtras;
-      let prodOption;
+      let prodOptions;
+      console.log('extras', extras);
+      console.log('options', options);
       if(extras.length > 0) {
         prodExtras = Promise.all(extras.map(async (extra) => await this.extraService.create(extra)));
       }
-      console.log('prodExtras', prodExtras);
-      console.log('prodOption', prodOption);
-
-      if(option) {
-        prodOption =  await this.optionService.create(option);
+      if(product.has_options) {
+        prodOptions = Promise.all(options.map(async (option) => await this.optionService.create(option)));
       }
+      console.log('prodExtras', prodExtras);
+      console.log('prodOptions', prodOptions);
+      
       p.extras = await prodExtras;
-      p.option = await prodOption;
+      p.options = await prodOptions;
       
       return  await this.productRepository.save(p);
 
@@ -60,7 +63,7 @@ export class ProductService {
   async findOne(id: number): Promise<Product> {
     const selectedProduct = await this.productRepository.findOne({
       where: { id },
-      relations: ['merchant', 'option', 'extras'] });
+      relations: ['option', 'extras'] });
     if (selectedProduct) {
       return selectedProduct;
     } else {

@@ -18,11 +18,15 @@ export class OrderDto {
     contact_method: number;
 
     @IsNumber()
-    table_id: number;
+    table_code: number;
 
     @IsNotEmpty()
     @IsNumber()
     paymenth_method: number;
+
+    @IsNotEmpty()
+    @IsString()
+    ordeR_status: string;
 
     @IsNotEmpty()
     @IsNumber()

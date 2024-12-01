@@ -45,7 +45,7 @@ export class ProductDto {
     @IsString()
     option_title: string;
 
-    option: ProductOptionDto;
+    options: ProductOptionDto[];
 
     extras: ProductExtraDto[];
 }
