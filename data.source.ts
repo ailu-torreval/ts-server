@@ -14,6 +14,9 @@ export const dbConfig: TypeOrmModuleOptions = {
     synchronize: true,
     entities: [__dirname + '/../dist/**/*.entity{.ts,.js}'], // Adjusted path
     migrations: [__dirname + '/../dist/src/migrations/*{.ts,.js}'], // Adjusted path
+    ssl: {
+        rejectUnauthorized: false,
+      },
 }
 
 const dataSource = new DataSource(dbConfig as DataSourceOptions);
