@@ -18,7 +18,7 @@ export class OrderDto {
     contact_method: number;
 
     @IsNumber()
-    table_code: number;
+    table_id: number;
 
     @IsNotEmpty()
     @IsNumber()
@@ -26,7 +26,7 @@ export class OrderDto {
 
     @IsNotEmpty()
     @IsString()
-    ordeR_status: string;
+    order_status: string;
 
     @IsNotEmpty()
     @IsNumber()

@@ -13,6 +13,10 @@ export class ProductDto {
     merchant_id: number;
 
     @IsNotEmpty()
+    @IsNumber()
+    menu_cat_id: number;
+
+    @IsNotEmpty()
     @IsString()
     name: string;
 

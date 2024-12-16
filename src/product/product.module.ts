@@ -8,9 +8,10 @@ import { ProductOptionService } from 'src/product_option/product_option.service'
 import { ProductExtra } from 'src/product_extra/entities/product_extra.entity';
 import { ProductOption } from 'src/product_option/entities/product_option.entity';
 import { Merchant } from 'src/merchant/entities/merchant.entity';
+import { MenuCat } from 'src/menu_cat/entities/menu_cat.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Product, ProductExtra, ProductOption, Merchant])],
+  imports: [TypeOrmModule.forFeature([Product, ProductExtra, ProductOption, Merchant, MenuCat])],
   controllers: [ProductController],
   providers: [ProductService, ProductExtraService, ProductOptionService],
   exports: [ProductService],

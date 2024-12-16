@@ -40,7 +40,7 @@ export class AuthService {
   
       const { password, ...result } = newUser;
   
-      return {...result, token: this.jwtService.sign({ username: newUser.email, id: newUser.id, role: newUser.role })};
+      return {user: result, token: this.jwtService.sign({ username: newUser.email, id: newUser.id, role: newUser.role })};
       
   }
 }

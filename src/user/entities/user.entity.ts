@@ -30,9 +30,6 @@ export class User {
   role: Role;
 
   @Column()
-  dob: Date;
-
-  @Column()
   phone_nr: string;
 
   @OneToMany(() => Order, (order) => order.user)
@@ -44,7 +41,6 @@ export class User {
     notification_token: string,
     password: string,
     email: string,
-    dob: Date,
     phone_nr: string,
     role?: Role,
   ) {
@@ -53,7 +49,6 @@ export class User {
     this.notification_token = notification_token;
     this.password = password;
     this.email = email;
-    this.dob = dob;
     this.phone_nr = phone_nr;
     this.role = role || Role.User;
   }

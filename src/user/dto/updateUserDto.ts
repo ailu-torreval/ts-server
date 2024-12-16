@@ -21,10 +21,9 @@ export class UpdateUserDto {
     role: Role;
 
     @IsNotEmpty()
-    @IsDate()
-    dob: Date;
-
-    @IsNotEmpty()
     @IsString()
     phone_nr: string;
+
+    @IsString()
+    notification_token: string;
 }

@@ -29,10 +29,6 @@ export class UserDto {
     role: Role;
 
     @IsNotEmpty()
-    @IsDate()
-    dob: Date;
-
-    @IsNotEmpty()
     @IsString()
     phone_nr: string;
 }

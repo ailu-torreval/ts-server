@@ -18,7 +18,13 @@ export class OrderService {
   async create(createOrderDto: OrderDto): Promise<Order> {
     try {
       const { user_id, order_products, ...rest } = createOrderDto;
-      const user = await this.userService.findOne(createOrderDto.user_id);
+      console.log(user_id)
+      let user;
+      if(user_id) {
+        user = await this.userService.findOne(user_id);
+      } else {
+        user = null;
+      }
       const order = this.orderRepository.create({...rest, date: new Date(rest.date), user});
       const createdOrder = await this.orderRepository.save(order);
       console.log(createdOrder)

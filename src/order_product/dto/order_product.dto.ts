@@ -33,4 +33,8 @@ export class OrderProductDto {
     @IsNotEmpty()
     @IsNumber()
     option_id: number;
+
+    @IsNotEmpty()
+    @IsString()
+    note: string;
 }

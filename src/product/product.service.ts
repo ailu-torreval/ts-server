@@ -7,6 +7,7 @@ import { Merchant } from 'src/merchant/entities/merchant.entity';
 import { MerchantService } from 'src/merchant/merchant.service';
 import { ProductExtraService } from 'src/product_extra/product_extra.service';
 import { ProductOptionService } from 'src/product_option/product_option.service';
+import { MenuCat } from 'src/menu_cat/entities/menu_cat.entity';
 
 
 @Injectable()
@@ -17,6 +18,8 @@ export class ProductService {
     private productRepository: Repository<Product>,
     @InjectRepository(Merchant)
     private merchantRepository: Repository<Merchant>,
+    @InjectRepository(MenuCat)
+    private menuCatRepository: Repository<MenuCat>,
     private extraService: ProductExtraService,
     private optionService: ProductOptionService,
   ) {}
@@ -24,8 +27,9 @@ export class ProductService {
 
   async create(createProductDto: ProductDto): Promise<Product> {
     try {
-      const { merchant_id, extras, options, ...rest } = createProductDto;
+      const { merchant_id, menu_cat_id, extras, options, ...rest } = createProductDto;
       let product: Partial<Product> = rest;
+      product.menu_cat = await this.menuCatRepository.findOne({where: {id: menu_cat_id}});
       product.merchant = await this.merchantRepository.findOne({where: {id: merchant_id}});
       const p = await this.productRepository.create(product);
       let prodExtras;
@@ -63,7 +67,7 @@ export class ProductService {
   async findOne(id: number): Promise<Product> {
     const selectedProduct = await this.productRepository.findOne({
       where: { id },
-      relations: ['option', 'extras'] });
+      relations: ['options', 'extras'] });
     if (selectedProduct) {
       return selectedProduct;
     } else {

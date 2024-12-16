@@ -3,6 +3,7 @@ import { MerchantDto } from './dto/merchant.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Merchant } from './entities/merchant.entity';
 import { Repository } from 'typeorm';
+import { Product } from 'src/product/entities/product.entity';
 
 
 @Injectable()
@@ -39,6 +40,25 @@ export class MerchantService {
   async findOne(id: number): Promise<Merchant> {
     try {
       return await this.merchantRepository.findOne({where: {id}, relations: ['menu_cats', 'menu_cats.products','merchant_tables']});
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Error fetching merchant, ${error}`,
+      );
+    }
+  }
+
+  async findMerchant(id: number): Promise<{merchant:Merchant, suggested_products?: Product[]}> {
+    try {
+      const merchant = await this.merchantRepository.findOne({where: {id}, relations: ['menu_cats', 'menu_cats.products']});
+      const suggested_products = merchant.menu_cats.reduce((acc, curr) => {
+        return [...acc, ...curr.products.filter(p => p.is_suggestion)];
+      }
+      , []);
+      if(suggested_products.length > 0) {
+        return {merchant, suggested_products};
+      } else {
+        return {merchant};
+      }
     } catch (error) {
       throw new InternalServerErrorException(
         `Error fetching merchant, ${error}`,

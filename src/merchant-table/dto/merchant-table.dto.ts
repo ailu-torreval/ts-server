@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsBoolean, IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class MerchantTableDto {
 
@@ -16,4 +16,10 @@ export class MerchantTableDto {
     @IsNotEmpty()
     @IsString()
     table_code: string;
+
+    @IsNotEmpty()
+    @IsBoolean()
+    is_active: boolean;
+
+
 }
