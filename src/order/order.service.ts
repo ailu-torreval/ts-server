@@ -5,6 +5,7 @@ import { Order } from './entities/order.entity';
 import { Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
 import { OrderProductService } from 'src/order_product/order_product.service';
+import { OrderGateway } from './order.gateway';
 
 @Injectable()
 export class OrderService {
@@ -13,6 +14,7 @@ export class OrderService {
     private orderRepository: Repository<Order>,
     private userService: UserService,
     private orderProductService: OrderProductService,
+    private orderGateway: OrderGateway,
   ) {}
 
   async create(createOrderDto: OrderDto): Promise<Order> {
@@ -32,12 +34,27 @@ export class OrderService {
         order_products,
         createdOrder,
       );
-      return await this.orderRepository.findOne({
+      const orderObject = await this.orderRepository.findOne({
         where: { id: createdOrder.id },
         relations: ['products', 'products.extras', 'products.option'],
       })
+      setTimeout(() => {
+        this.acceptOrder(createdOrder.id);
+      }
+      , 10000);
+      return orderObject;
     } catch (error) {
       throw new InternalServerErrorException(`Error creating order, ${error}`);
+    }
+  }
+
+  async acceptOrder(id: number) {
+    try {
+      await this.changeStatus(id, 'accepted');
+      await this.orderGateway.emitOrderAccepted(id.toString());
+      console.log('Order accepted socket emitted for order', id);
+    } catch (error) {
+      console.log('Error accepting order', error);
     }
   }
 
