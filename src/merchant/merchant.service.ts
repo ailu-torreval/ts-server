@@ -4,6 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Merchant } from './entities/merchant.entity';
 import { Repository } from 'typeorm';
 import { Product } from 'src/product/entities/product.entity';
+import { User } from 'src/user/entities/user.entity';
+import { OrderService } from 'src/order/order.service';
 
 
 @Injectable()
@@ -11,7 +13,8 @@ export class MerchantService {
 
   constructor(
     @InjectRepository(Merchant)
-    private merchantRepository: Repository<Merchant>
+    private merchantRepository: Repository<Merchant>,
+    private orderService: OrderService,
   ) {}
 
   
@@ -59,6 +62,38 @@ export class MerchantService {
       } else {
         return {merchant};
       }
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Error fetching merchant, ${error}`,
+      );
+    }
+  }
+
+  async findMerchantByAdminId(admin_id: number): Promise<Merchant> {
+    try {
+      console.log("fetching merchant by admin id", admin_id);
+      const merchant = await this.merchantRepository.findOne({
+        where: { admin_id },
+        relations: [
+          'menu_cats',
+          'menu_cats.products',
+          'menu_cats.products.extras',
+          'menu_cats.products.options',
+        ],
+      });
+      console.log("merchant fetched by admin id");
+
+
+      if (!merchant) {
+        throw new InternalServerErrorException(`Merchant not found for admin id ${admin_id}`);
+      }
+
+      // Fetch orders separately based on merchant_id
+      const orders = await this.orderService.getMerchantOrders(merchant.id);
+
+      merchant.orders = orders;
+      return merchant;
+      
     } catch (error) {
       throw new InternalServerErrorException(
         `Error fetching merchant, ${error}`,

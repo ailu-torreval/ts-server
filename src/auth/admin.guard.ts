@@ -8,7 +8,7 @@ export class AdminGuard implements CanActivate {
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
-        const user: User = request.user
+        const user: User = request.user;
 
         return user && user.role === Role.Merchant_admin
     }

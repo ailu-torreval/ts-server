@@ -38,23 +38,13 @@ export class OrderService {
         where: { id: createdOrder.id },
         relations: ['products', 'products.extras', 'products.option'],
       })
-      setTimeout(() => {
-        this.acceptOrder(createdOrder.id);
-      }
-      , 10000);
+      // setTimeout(() => {
+      //   this.changeStatus(createdOrder.id, 'accepted');
+      // }
+      // , 10000);
       return orderObject;
     } catch (error) {
       throw new InternalServerErrorException(`Error creating order, ${error}`);
-    }
-  }
-
-  async acceptOrder(id: number) {
-    try {
-      await this.changeStatus(id, 'accepted');
-      await this.orderGateway.emitOrderAccepted(id.toString());
-      console.log('Order accepted socket emitted for order', id);
-    } catch (error) {
-      console.log('Error accepting order', error);
     }
   }
 
@@ -115,11 +105,30 @@ export class OrderService {
     }
   }
 
+  async getMerchantOrders(merchant_id: number): Promise<Order[]> {
+    try {
+      const orders = await this.orderRepository.find({
+        where: { merchant_id },
+        relations: ['user', 'products', 'products.extras', 'products.option'],
+      });
+      return orders;
+    } catch (error) {
+      throw new InternalServerErrorException('Error fetching orders' + error);
+    }
+  }
+
   async changeStatus(id: number, status: string): Promise<any> {
     try {
       const updatedOrder = await this.orderRepository.update(id, { order_status: status });
       if (updatedOrder.affected === 1) {
-        return {'success': true}; 
+        await this.orderGateway.emitOrderChanged(id.toString(), status);
+        console.log('Order status changed socket emitted for order', id);
+        const order = await this.orderRepository.findOne({
+          where: { id },
+          relations: ['products', 'products.option', 'products.extras'],
+        });
+
+        return order;
      } else {
         throw new NotFoundException(`Order with id ${id} not found`);
       }

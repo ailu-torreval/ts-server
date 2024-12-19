@@ -17,11 +17,12 @@ import { User } from 'src/user/entities/user.entity';
 import { AdminGuard } from './admin.guard';
 import { UserDto } from 'src/user/dto/user.dto';
 import { AuthGuard } from './auth.guard';
+import { MerchantService } from 'src/merchant/merchant.service';
 
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService, private readonly merchantService:MerchantService) {}
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
@@ -36,9 +37,10 @@ export class AuthController {
     return result;
   }
   @UseGuards(AuthGuard, AdminGuard)
-  @Get('admin')
+  @Get('adminProfile')
   getAdminProfile(@Request() req){
-    return req.user;
+    console.log(req.user);
+    return this.merchantService.findMerchantByAdminId(req.user.id);
   }
 
   @Post('signup')

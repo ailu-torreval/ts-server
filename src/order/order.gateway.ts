@@ -31,8 +31,14 @@ export class OrderGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log(`Client joined room order_${orderId}`);
   }
 
-  emitOrderAccepted(orderId: string) {
+  @SubscribeMessage('joinMerchantRoom')
+  handleJoinMerchanRoom(client: Socket, merchantId: string) {
+    client.join(`merchant_${merchantId}`);
+    console.log(`Client joined room merchant_${merchantId}`);
+  }
+
+  emitOrderChanged(orderId: string, status: string) {
     console.log('Emitting order accepted for order from socket', orderId);
-    this.server.to(`order_${orderId}`).emit('orderAccepted', { orderId });
+    this.server.to(`order_${orderId}`).emit('orderChanged', { orderId, status });
   }
 }
