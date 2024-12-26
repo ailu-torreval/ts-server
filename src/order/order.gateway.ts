@@ -32,7 +32,7 @@ export class OrderGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('joinMerchantRoom')
-  handleJoinMerchanRoom(client: Socket, merchantId: string) {
+  handleJoinMerchantRoom(client: Socket, merchantId: string) {
     client.join(`merchant_${merchantId}`);
     console.log(`Client joined room merchant_${merchantId}`);
   }
@@ -40,5 +40,10 @@ export class OrderGateway implements OnGatewayConnection, OnGatewayDisconnect {
   emitOrderChanged(orderId: string, status: string) {
     console.log('Emitting order accepted for order from socket', orderId);
     this.server.to(`order_${orderId}`).emit('orderChanged', { orderId, status });
+  }
+
+  emitOrderCreated(merchantId: string, orderId: string) {
+    console.log('Emitting order created for merchant from socket', merchantId);
+    this.server.to(`merchant_${merchantId}`).emit('orderCreated', { orderId });
   }
 }

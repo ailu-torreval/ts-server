@@ -38,10 +38,14 @@ export class OrderService {
         where: { id: createdOrder.id },
         relations: ['products', 'products.extras', 'products.option'],
       })
+      // for dispaly purposes, orders are being accepted automatically after 10 seconds
       setTimeout(() => {
         this.changeStatus(createdOrder.id, 'accepted');
       }
       , 10000);
+      // FOR PRODUCTION --- Emit order created event to the merchant room
+      // console.log('Emitting order created for merchant from service', rest.merchant_id.toString());
+      // this.orderGateway.emitOrderCreated(rest.merchant_id.toString(), createdOrder.id.toString());
       return orderObject;
     } catch (error) {
       throw new InternalServerErrorException(`Error creating order, ${error}`);
@@ -63,15 +67,8 @@ export class OrderService {
     try {
       const selectedOrder = await this.orderRepository.findOne({
         where: { id },
-        relations: ['user'],
-        join: {
-          alias: 'order',
-          leftJoinAndSelect: {
-            products: 'order.products',
-            product_extras: 'product.extras',
-            product_options: 'products.options',
-          }}
-      });
+        relations: ['products', 'products.extras', 'products.option'],
+      })
       if (selectedOrder) {
         return selectedOrder;
       } else {

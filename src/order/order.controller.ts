@@ -36,7 +36,7 @@ export class OrderController {
   }
 
   @Patch('status/:id')
-  updateStatus(@Param('id') id: string, @Body() status: any) {
+  updateStatus(@Param('id') id: string, @Body('status') status: string) {
     console.log("FROM STATUS",status);
     return this.orderService.changeStatus(+id, status);
   }
