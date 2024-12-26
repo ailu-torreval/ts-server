@@ -38,10 +38,10 @@ export class OrderService {
         where: { id: createdOrder.id },
         relations: ['products', 'products.extras', 'products.option'],
       })
-      // setTimeout(() => {
-      //   this.changeStatus(createdOrder.id, 'accepted');
-      // }
-      // , 10000);
+      setTimeout(() => {
+        this.changeStatus(createdOrder.id, 'accepted');
+      }
+      , 10000);
       return orderObject;
     } catch (error) {
       throw new InternalServerErrorException(`Error creating order, ${error}`);
