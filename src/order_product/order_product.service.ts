@@ -76,7 +76,7 @@ export class OrderProductService {
       if (updatedOrderProd.affected === 1) {
         return this.orderProdRepository.findOne({
           where: { id },
-          relations: ['cars', 'invoices'],
+          relations: ['extras', 'options'],
         });
       }
     } catch (error) {

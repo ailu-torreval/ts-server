@@ -14,9 +14,10 @@ export const dbConfig: TypeOrmModuleOptions = {
     // password: process.env.DB_PASSWORD,
     // database: process.env.DB_NAME,
     // END DEVELOPMENT
+    //for both
     synchronize: true,
-    entities: [__dirname + '/../dist/**/*.entity{.ts,.js}'], // Adjusted path
-    migrations: [__dirname + '/../dist/src/migrations/*{.ts,.js}'], // Adjusted path
+    entities: [__dirname + '/../dist/**/*.entity{.ts,.js}'],
+    migrations: [__dirname + '/../dist/src/migrations/*{.ts,.js}'],
     // FOR PRODUCTION
     ssl: {
         rejectUnauthorized: false,

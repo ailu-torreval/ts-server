@@ -75,6 +75,7 @@ export class MerchantService {
       const merchant = await this.merchantRepository.findOne({
         where: { admin_id },
         relations: [
+          'merchant_tables',
           'menu_cats',
           'menu_cats.products',
           'menu_cats.products.extras',

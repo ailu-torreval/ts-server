@@ -29,7 +29,6 @@ import { UserService } from 'src/user/user.service';
           secret: process.env.jwt_secret,
         });
         request.user = await this.userService.findOne(payload.id);
-        // request['user'] = payload;
       } catch {
         throw new UnauthorizedException();
       }

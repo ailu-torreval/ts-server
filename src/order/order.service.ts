@@ -38,7 +38,7 @@ export class OrderService {
         where: { id: createdOrder.id },
         relations: ['products', 'products.extras', 'products.option'],
       })
-      // for dispaly purposes, orders are being accepted automatically after 10 seconds
+      // for display purposes, orders are being accepted automatically after 10 seconds
       setTimeout(() => {
         this.changeStatus(createdOrder.id, 'accepted');
       }
