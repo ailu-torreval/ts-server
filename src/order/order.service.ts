@@ -39,13 +39,13 @@ export class OrderService {
         relations: ['products', 'products.extras', 'products.option'],
       })
       // for display purposes, orders are being accepted automatically after 10 seconds
-      setTimeout(() => {
-        this.changeStatus(createdOrder.id, 'accepted');
-      }
-      , 10000);
+      // setTimeout(() => {
+      //   this.changeStatus(createdOrder.id, 'accepted');
+      // }
+      // , 10000);
       // FOR PRODUCTION --- Emit order created event to the merchant room
-      // console.log('Emitting order created for merchant from service', rest.merchant_id.toString());
-      // this.orderGateway.emitOrderCreated(rest.merchant_id.toString(), createdOrder.id.toString());
+      console.log('Emitting order created for merchant from service', rest.merchant_id.toString());
+      this.orderGateway.emitOrderCreated(rest.merchant_id.toString(), createdOrder.id.toString());
       return orderObject;
     } catch (error) {
       throw new InternalServerErrorException(`Error creating order, ${error}`);
